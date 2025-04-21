@@ -26,7 +26,7 @@ class ServerPlayer : AudioEventAdapter {
         logger.debug { "Enqueuing tracks: $tracks" }
         trackQueue.enqueue(tracks)
         if (!playing) {
-            trackQueue.nextTrack()?.let { play(it) }
+            playNext()
         }
     }
 
@@ -34,20 +34,23 @@ class ServerPlayer : AudioEventAdapter {
         logger.debug { "Enqueuing track: $track" }
         trackQueue.enqueue(listOf(track))
         if (!playing) {
-            trackQueue.nextTrack()?.let { play(it) }
+            playNext()
         }
     }
 
     fun enqueueFirst(tracks: List<AudioTrack>) {
         logger.debug { "Prepending tracks: $tracks" }
         trackQueue.enqueueFirst(tracks)
-        trackQueue.nextTrack()?.let { play(it) }
+        playNext()
     }
 
     fun enqueueFirst(track: AudioTrack) {
         logger.debug { "Prepending track: $track" }
         trackQueue.enqueueFirst(listOf(track))
+        playNext()
+    }
 
+    fun playNext() {
         trackQueue.nextTrack()?.let { play(it) }
     }
 
