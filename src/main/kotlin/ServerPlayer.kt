@@ -2,9 +2,7 @@ package io.github.nicokun1316
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.player.event.AudioEvent
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter
-import com.sedmelluq.discord.lavaplayer.player.event.AudioEventListener
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
@@ -19,32 +17,35 @@ class ServerPlayer : AudioEventAdapter {
     }
 
     fun enqueue(tracks: List<AudioTrack>) {
-        val empty = queue.isEmpty()
+        logger.debug { "Enqueuing tracks: $tracks" }
         mutableQueue.addAll(tracks)
-        if (empty) { play() }
+        if (index == queue.size - tracks.size) { play() }
     }
 
     fun enqueue(track: AudioTrack) {
-        val empty = queue.isEmpty()
+        logger.debug { "Enqueuing track: $track" }
         mutableQueue.add(track)
-        if (empty) { play() }
+        if (index == queue.size - 1) { play() }
     }
 
     fun enqueueFirst(tracks: List<AudioTrack>) {
-        val empty = queue.isEmpty()
+        logger.debug { "Prepending tracks: $tracks" }
         mutableQueue.addAll(0, tracks)
-        if (empty) { play() }
+        play()
     }
 
     fun enqueueFirst(track: AudioTrack) {
-        val empty = queue.isEmpty()
+        logger.debug { "Prepending track: $track" }
         mutableQueue.addFirst(track)
-        if (empty) { play() }
+        play()
     }
 
     fun play() {
         if (index < queue.size) {
+            logger.debug { "Playing ${queue[index]}" }
             player.playTrack(queue[index])
+        } else {
+            logger.warn { "No tracks available" }
         }
     }
 
@@ -79,10 +80,16 @@ class ServerPlayer : AudioEventAdapter {
     fun getData() = player.provide()?.data
 
     val queue: List<AudioTrack>
-        get() = mutableListOf<AudioTrack>().apply {}
+        get() = mutableQueue
+
+    val currentIndex: Int
+        get() = index
 
     private var wrapAround = true
     private var index = 0
     private val player: AudioPlayer
     private val mutableQueue: MutableList<AudioTrack> = mutableListOf()
+    override fun toString(): String {
+        return "ServerPlayer(${queue.joinToString(", ") { it.info.title }})"
+    }
 }

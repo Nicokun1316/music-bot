@@ -10,11 +10,11 @@ context(event: GuildChatInputCommandInteractionCreateEvent)
 @OptIn(KordVoice::class)
 suspend fun MusicEnv.ensureConnected() {
     val vc = event.interaction.user.getVoiceStateOrNull()?.getChannelOrNull() ?: return
-    val snowflake = event.interaction.guild.id
-    if (hasPlayer(snowflake)) return
+    if (hasPlayer) return
+    val p = player
     vc.connect {
         audioProvider {
-            AudioFrame.fromData(getPlayer(snowflake).getData())
+            AudioFrame.fromData(p.getData())
         }
     }
 }

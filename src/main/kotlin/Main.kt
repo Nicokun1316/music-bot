@@ -10,8 +10,10 @@ import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.kord.rest.builder.interaction.string
 import io.github.cdimascio.dotenv.dotenv
+import io.github.nicokun1316.commands.commands
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.JsonNull.content
 
 private val logger = KotlinLogging.logger {}
 
@@ -35,47 +37,29 @@ suspend fun main() {
         }
     }
 
-    val meowCommand = kord.createGlobalChatInputCommand("meow", "meow meow") {
-
-    }
-
-    val playCommand = kord.createGlobalChatInputCommand("play", "meowww") {
-        string("track", "song name/url or playlist url") {
-            required = true
-        }
-    }
-
-    val queueCommand = kord.createGlobalChatInputCommand("queue", "meowwa") {
-
-    }
+    commands.values.forEach { command -> kord.createGlobalChatInputCommand(command.name, command.description) { with(command) { builder() } } }
 
     kord.on<GuildChatInputCommandInteractionCreateEvent> {
         val response = interaction.deferPublicResponse()
-        if (interaction.invokedCommandName == "meow") {
-            env.ensureConnected()
-            logger.info { "Command meow received" }
-            try {
-                val tracks = env.findTracks("it's a whole world kagamine len")
-                env.player.enqueue(tracks)
-                response.respond { content = "I no longer think" }
-            } catch (e: Exception) {
-                response.respond { content = "I am error ${e.message}" }
+        val command = commands[interaction.invokedCommandName]
+        if (command == null) {
+            logger.warn {  "No command found for name: $interaction.invokedCommandName" }
+            response.respond { content = "Unknown command ${interaction.invokedCommandName}" }
+            return@on
+        }
+        try {
+            with(env) {
+                logger.info { "Running command ${interaction.invokedCommandName}" }
+                if (command.needsVC) {
+                    logger.info { "Ensuring VC" }
+                    ensureConnected()
+                }
+                val responseString = with(command) { execute() }
+                response.respond { content = responseString }
             }
-        } else if (interaction.invokedCommandName == "play") {
-            env.ensureConnected()
-            logger.info { "Command play received" }
-            val query = interaction.command.strings["track"] ?: return@on
-            try {
-                val tracks = env.findTracks(query)
-                env.player.enqueue(tracks)
-                response.respond { content = "Enqueued ${tracks.size} tracks" }
-            } catch (e: Exception) {
-                response.respond { content = "I am error ${e.message}" }
-            }
-        } else if (interaction.invokedCommandName == "queue") {
-            if (env.hasPlayer) {
-                response.respond { content = "Queue: \n" + env.player.queue.joinToString("\n") }
-            }
+        } catch (e: Exception) {
+            logger.warn(e) { "Command ${interaction.invokedCommandName} failed to execute" }
+            response.respond { content = e.message ?: "Command  ${interaction.invokedCommandName} failed" }
         }
     }
 

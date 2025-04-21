@@ -4,6 +4,9 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import dev.kord.common.entity.Snowflake
 import dev.lavalink.youtube.YoutubeAudioSourceManager
+import io.github.oshai.kotlinlogging.KotlinLogging
+
+private val logger  = KotlinLogging.logger{}
 
 class MusicEnv {
     constructor() {
@@ -11,10 +14,16 @@ class MusicEnv {
         AudioSourceManagers.registerRemoteSources(audioManager)
     }
 
-    fun hasPlayer(snowflake: Snowflake): Boolean = snowflake in players
+    fun hasPlayer(snowflake: Snowflake): Boolean {
+        logger.debug { "hasPlayer $snowflake" }
+        return snowflake in players
+    }
 
-    fun getPlayer(snowflake: Snowflake): ServerPlayer = players.getOrPut(snowflake) {
-        ServerPlayer(audioManager)
+    fun getPlayer(snowflake: Snowflake): ServerPlayer {
+        logger.debug { "getPlayer $snowflake" }
+        return players.getOrPut(snowflake) {
+            ServerPlayer(audioManager)
+        }
     }
 
     suspend fun findTracks(query: String) = audioManager.findTracks(query)
@@ -22,4 +31,8 @@ class MusicEnv {
     private val audioManager = DefaultAudioPlayerManager()
     private val ytSourceManager = YoutubeAudioSourceManager()
     private val players = mutableMapOf<Snowflake, ServerPlayer>()
+
+    override fun toString(): String {
+        return players.toString()
+    }
 }
