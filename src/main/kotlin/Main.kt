@@ -45,6 +45,10 @@ suspend fun main() {
         }
     }
 
+    val queueCommand = kord.createGlobalChatInputCommand("queue", "meowwa") {
+
+    }
+
     kord.on<GuildChatInputCommandInteractionCreateEvent> {
         val response = interaction.deferPublicResponse()
         if (interaction.invokedCommandName == "meow") {
@@ -67,6 +71,10 @@ suspend fun main() {
                 response.respond { content = "Enqueued ${tracks.size} tracks" }
             } catch (e: Exception) {
                 response.respond { content = "I am error ${e.message}" }
+            }
+        } else if (interaction.invokedCommandName == "queue") {
+            if (env.hasPlayer) {
+                response.respond { content = "Queue: \n" + env.player.queue.joinToString("\n") }
             }
         }
     }

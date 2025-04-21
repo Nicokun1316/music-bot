@@ -22,3 +22,7 @@ suspend fun MusicEnv.ensureConnected() {
 context(event: GuildChatInputCommandInteractionCreateEvent)
 val MusicEnv.player: ServerPlayer
     get() = getPlayer(event.interaction.guild.id)
+
+context(event: GuildChatInputCommandInteractionCreateEvent)
+val MusicEnv.hasPlayer: Boolean
+    get() = hasPlayer(event.interaction.guild.id)

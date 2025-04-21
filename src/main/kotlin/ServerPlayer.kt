@@ -20,25 +20,25 @@ class ServerPlayer : AudioEventAdapter {
 
     fun enqueue(tracks: List<AudioTrack>) {
         val empty = queue.isEmpty()
-        queue.addAll(tracks)
+        mutableQueue.addAll(tracks)
         if (empty) { play() }
     }
 
     fun enqueue(track: AudioTrack) {
         val empty = queue.isEmpty()
-        queue.add(track)
+        mutableQueue.add(track)
         if (empty) { play() }
     }
 
     fun enqueueFirst(tracks: List<AudioTrack>) {
         val empty = queue.isEmpty()
-        queue.addAll(0, tracks)
+        mutableQueue.addAll(0, tracks)
         if (empty) { play() }
     }
 
     fun enqueueFirst(track: AudioTrack) {
         val empty = queue.isEmpty()
-        queue.addFirst(track)
+        mutableQueue.addFirst(track)
         if (empty) { play() }
     }
 
@@ -78,8 +78,11 @@ class ServerPlayer : AudioEventAdapter {
 
     fun getData() = player.provide()?.data
 
+    val queue: List<AudioTrack>
+        get() = mutableListOf<AudioTrack>().apply {}
+
     private var wrapAround = true
     private var index = 0
     private val player: AudioPlayer
-    private val queue: MutableList<AudioTrack> = mutableListOf()
+    private val mutableQueue: MutableList<AudioTrack> = mutableListOf()
 }
