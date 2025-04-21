@@ -17,7 +17,7 @@ class MusicEnv {
     fun hasPlayer(snowflake: Snowflake): Boolean = snowflake in players
 
     fun getPlayer(snowflake: Snowflake): ServerPlayer = players.getOrPut(snowflake) {
-        ServerPlayer(audioManager).apply { volume = 50 }
+        ServerPlayer(audioManager).apply { volume = 10 }
     }
 
     suspend fun disconnect(snowflake: Snowflake) {
