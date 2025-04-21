@@ -6,6 +6,8 @@ import kotlin.math.min
 interface TrackQueueInterface {
     fun tableRep(): String
 
+    fun shuffle()
+
     val currentTrack: AudioTrack?
     val currentIndex: Int
     val size: Int
@@ -18,6 +20,13 @@ class TrackQueue: TrackQueueInterface {
     public fun enqueue(tracks: Collection<AudioTrack>) {
         queue.addAll(tracks)
     }
+
+    override fun shuffle() {
+        val current = currentTrack
+        queue.shuffle()
+        index = queue.indexOf(current)
+    }
+
     public fun enqueueFirst(tracks: Collection<AudioTrack>) {
         index = -1
         queue.addAll(0, tracks)
