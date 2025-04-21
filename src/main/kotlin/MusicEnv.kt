@@ -22,7 +22,7 @@ class MusicEnv {
     fun getPlayer(snowflake: Snowflake): ServerPlayer {
         logger.debug { "getPlayer $snowflake" }
         return players.getOrPut(snowflake) {
-            ServerPlayer(audioManager)
+            ServerPlayer(audioManager).apply { volume = 0.5 }
         }
     }
 

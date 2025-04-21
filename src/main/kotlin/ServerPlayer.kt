@@ -42,10 +42,10 @@ class ServerPlayer : AudioEventAdapter {
 
     fun play() {
         if (index < queue.size) {
-            logger.debug { "Playing ${queue[index]}" }
-            player.playTrack(queue[index])
+            logger.debug { "Playing ${currentTrack.info.title}" }
+            player.playTrack(currentTrack)
         } else {
-            logger.warn { "No tracks available" }
+            logger.warn { "No tracks left" }
         }
     }
 
@@ -84,6 +84,23 @@ class ServerPlayer : AudioEventAdapter {
 
     val currentIndex: Int
         get() = index
+
+    val currentTrack: AudioTrack
+        get() = queue[currentIndex]
+
+    val progress get() = currentTrack.position / currentTrack.duration
+
+    var volume
+        get() = player.volume
+        set(value) {
+            player.volume = 50
+        }
+
+    fun skip() {
+        ++index
+        play()
+    }
+
 
     private var wrapAround = true
     private var index = 0

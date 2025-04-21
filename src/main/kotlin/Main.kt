@@ -1,19 +1,20 @@
 package io.github.nicokun1316
 
+import dev.kord.common.Color
 import dev.kord.common.annotation.KordVoice
 import dev.kord.core.Kord
+import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
-import dev.kord.rest.builder.interaction.string
+import dev.kord.rest.builder.message.embed
 import io.github.cdimascio.dotenv.dotenv
 import io.github.nicokun1316.commands.commands
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.JsonNull.content
 
 private val logger = KotlinLogging.logger {}
 
@@ -34,6 +35,27 @@ suspend fun main() {
         if (message.author?.isBot == true) return@on
         if (message.content.contains("meow", true)) {
             message.channel.createMessage("meeoowww")
+            message.channel.createMessage {
+                embed {
+                    title = "Title"
+                    description = "This is a long description"
+                    author { name = "author" }
+                    color = Color(0x00FF00)
+                    footer {
+                        text = "footer"
+                    }
+                    field {
+                        name = "Field inline"
+                        value = "Field value inline"
+                        inline = true
+                    }
+                    field {
+                        name = "Field not inline"
+                        value = "Field value not inline"
+                        inline = false
+                    }
+                }
+            }
         }
     }
 
