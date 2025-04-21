@@ -87,7 +87,7 @@ class ServerPlayer : AudioEventAdapter {
 
     fun getData() = player.provide()?.data
 
-    val progress get() = trackQueue.currentTrack.position / trackQueue.currentTrack.duration
+    val progress: Double get() = (playingTrack?.position?.toDouble() ?: 0.0) / (playingTrack?.duration?.toDouble() ?: 0.0)
 
     var volume
         get() = player.volume
@@ -107,6 +107,12 @@ class ServerPlayer : AudioEventAdapter {
     public val tracks: TrackQueueInterface
         get() = trackQueue
 
+    public val connected
+        get() = connection != null
+
+    public val playingTrack: AudioTrack?
+        get() = player.playingTrack
+
     suspend fun connect(channel: BaseVoiceChannelBehavior) {
         connection = channel.connect {
             audioProvider {
@@ -116,7 +122,7 @@ class ServerPlayer : AudioEventAdapter {
     }
 
     suspend fun disconnect() {
-        connection?.disconnect()
+        connection?.leave()
         connection = null
     }
 

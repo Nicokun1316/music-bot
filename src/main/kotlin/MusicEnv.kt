@@ -14,15 +14,17 @@ class MusicEnv {
         AudioSourceManagers.registerRemoteSources(audioManager)
     }
 
-    fun hasPlayer(snowflake: Snowflake): Boolean {
-        logger.debug { "hasPlayer $snowflake" }
-        return snowflake in players
+    fun hasPlayer(snowflake: Snowflake): Boolean = snowflake in players
+
+    fun getPlayer(snowflake: Snowflake): ServerPlayer = players.getOrPut(snowflake) {
+        ServerPlayer(audioManager).apply { volume = 50 }
     }
 
-    fun getPlayer(snowflake: Snowflake): ServerPlayer {
-        logger.debug { "getPlayer $snowflake" }
-        return players.getOrPut(snowflake) {
-            ServerPlayer(audioManager).apply { volume = 50 }
+    suspend fun disconnect(snowflake: Snowflake) {
+        val player = players[snowflake]
+        if (player != null) {
+            player.disconnect()
+            players.remove(snowflake)
         }
     }
 

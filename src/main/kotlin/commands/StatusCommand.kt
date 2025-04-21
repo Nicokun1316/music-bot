@@ -8,6 +8,6 @@ object StatusCommand: BotCommand("status", "Displays status") {
     context(env: MusicEnv)
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute(): String {
         val player = env.player
-        return player.progress.toString()
+        return "${(player.playingTrack?.position ?: 0) / 1000.0}s/${(player.playingTrack?.duration ?: 0) / 1000.0}s (${player.progress * 100}%)"
     }
 }

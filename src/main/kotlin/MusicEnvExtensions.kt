@@ -21,3 +21,9 @@ val MusicEnv.player: ServerPlayer
 context(event: GuildChatInputCommandInteractionCreateEvent)
 val MusicEnv.hasPlayer: Boolean
     get() = hasPlayer(event.interaction.guild.id)
+
+context(event: GuildChatInputCommandInteractionCreateEvent)
+suspend fun MusicEnv.disconnect() {
+    disconnect(event.interaction.guild.id)
+}
+
