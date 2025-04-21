@@ -4,7 +4,7 @@ import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEve
 import io.github.nicokun1316.MusicEnv
 import io.github.nicokun1316.player
 
-object SkipCommand: BotCommand("Skip", "Skips current track") {
+object SkipCommand: BotCommand("skip", "Skips current track") {
     context(env: MusicEnv)
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute(): String {
         env.player.skip()
