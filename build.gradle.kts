@@ -22,6 +22,7 @@ dependencies {
     implementation("dev.lavalink.youtube:v2:1.12.0")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.5.13")
+    implementation(kotlin("reflect"))
     testImplementation(kotlin("test"))
 }
 

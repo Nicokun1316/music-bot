@@ -4,8 +4,9 @@ import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEve
 import dev.kord.rest.builder.interaction.GlobalChatInputCreateBuilder
 import io.github.nicokun1316.MusicEnv
 
-abstract class BotCommand(val name: String, val description: String, val needsVC: Boolean = true) {
-    init {
+sealed class BotCommand(val name: String, val description: String, val needsVC: Boolean = true) {
+    @Suppress("unused")
+    fun initialise() {
         registerCommand(this)
     }
 

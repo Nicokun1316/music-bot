@@ -11,12 +11,7 @@ context(event: GuildChatInputCommandInteractionCreateEvent)
 suspend fun MusicEnv.ensureConnected() {
     val vc = event.interaction.user.getVoiceStateOrNull()?.getChannelOrNull() ?: return
     if (hasPlayer) return
-    val p = player
-    vc.connect {
-        audioProvider {
-            AudioFrame.fromData(p.getData())
-        }
-    }
+    player.connect(vc)
 }
 
 context(event: GuildChatInputCommandInteractionCreateEvent)

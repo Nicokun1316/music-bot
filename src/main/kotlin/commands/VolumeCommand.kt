@@ -7,7 +7,7 @@ import dev.kord.rest.builder.interaction.integer
 import io.github.nicokun1316.MusicEnv
 import io.github.nicokun1316.player
 
-class VolumeCommand: BotCommand("Volume", "Sets or displays volume (0-100)") {
+object VolumeCommand: BotCommand("volume", "Sets or displays volume (0-100)") {
     context(env: MusicEnv)
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute(): String {
         val value = interaction.command.integers["value"]

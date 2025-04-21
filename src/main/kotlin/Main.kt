@@ -15,6 +15,7 @@ import io.github.cdimascio.dotenv.dotenv
 import io.github.nicokun1316.commands.commands
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
+import io.github.nicokun1316.commands.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -30,6 +31,8 @@ suspend fun main() {
     val kord = Kord(secret)
 
     val env = MusicEnv()
+
+    initialiseCommands()
 
     kord.on<MessageCreateEvent> {
         if (message.author?.isBot == true) return@on
@@ -59,7 +62,10 @@ suspend fun main() {
         }
     }
 
-    commands.values.forEach { command -> kord.createGlobalChatInputCommand(command.name, command.description) { with(command) { builder() } } }
+    for (command in commands.values) {
+        logger.debug { "Creating command ${command.name} with description ${command.description}" }
+        kord.createGlobalChatInputCommand(command.name, command.description) { with(command) { builder() } }
+    }
 
     kord.on<GuildChatInputCommandInteractionCreateEvent> {
         val response = interaction.deferPublicResponse()

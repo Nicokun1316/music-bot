@@ -4,10 +4,10 @@ import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEve
 import io.github.nicokun1316.MusicEnv
 import io.github.nicokun1316.player
 
-object StatusCommand: BotCommand("status", "Displays status") {
+object ResumeCommand: BotCommand("Resume", "Resumes the bot") {
     context(env: MusicEnv)
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute(): String {
-        val player = env.player
-        return player.progress.toString()
+        env.player.resume()
+        return "Resumed"
     }
 }
