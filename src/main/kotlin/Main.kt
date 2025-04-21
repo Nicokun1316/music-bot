@@ -1,10 +1,7 @@
 package io.github.nicokun1316
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
 import dev.kord.common.annotation.KordVoice
 import dev.kord.core.Kord
-import dev.kord.core.behavior.channel.BaseVoiceChannelBehavior
-import dev.kord.core.behavior.channel.connect
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
@@ -12,12 +9,11 @@ import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.kord.rest.builder.interaction.string
-import dev.kord.voice.AudioFrame
 import io.github.cdimascio.dotenv.dotenv
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
 
-
-
+private val logger = KotlinLogging.logger {}
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -53,6 +49,7 @@ suspend fun main() {
         val response = interaction.deferPublicResponse()
         if (interaction.invokedCommandName == "meow") {
             env.ensureConnected()
+            logger.info { "Command meow received" }
             try {
                 val tracks = env.findTracks("it's a whole world kagamine len")
                 env.player.enqueue(tracks)
@@ -61,6 +58,8 @@ suspend fun main() {
                 response.respond { content = "I am error ${e.message}" }
             }
         } else if (interaction.invokedCommandName == "play") {
+            env.ensureConnected()
+            logger.info { "Command play received" }
             val query = interaction.command.strings["track"] ?: return@on
             try {
                 val tracks = env.findTracks(query)

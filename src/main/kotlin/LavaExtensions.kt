@@ -11,7 +11,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-val logger = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger {}
 
 suspend fun DefaultAudioPlayerManager.findTracks(query: String): List<AudioTrack> = suspendCoroutine {
     this.loadItem("ytsearch: $query", object : AudioLoadResultHandler {

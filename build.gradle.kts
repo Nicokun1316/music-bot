@@ -20,8 +20,8 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.5.1")
     implementation("dev.arbjerg:lavaplayer:2.2.3")
     implementation("dev.lavalink.youtube:v2:1.12.0")
-    implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
-    implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.6")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+    implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.5.13")
     testImplementation(kotlin("test"))
 }
 
