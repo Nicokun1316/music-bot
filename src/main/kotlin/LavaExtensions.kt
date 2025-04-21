@@ -13,8 +13,8 @@ import kotlin.coroutines.suspendCoroutine
 
 private val logger = KotlinLogging.logger {}
 
-suspend fun DefaultAudioPlayerManager.findTracks(query: String): List<AudioTrack> = suspendCoroutine {
-    this.loadItem("ytsearch: $query", object : AudioLoadResultHandler {
+suspend fun DefaultAudioPlayerManager.findTracks(query: String, search: Boolean = true): List<AudioTrack> = suspendCoroutine {
+    this.loadItem("${if (search) "ytsearch: " else ""}$query", object : AudioLoadResultHandler {
 
         override fun trackLoaded(track: AudioTrack) {
             logger.info {

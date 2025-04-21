@@ -28,7 +28,7 @@ class MusicEnv {
         }
     }
 
-    suspend fun findTracks(query: String) = audioManager.findTracks(query)
+    suspend fun findTracks(query: String, search: Boolean = true) = audioManager.findTracks(query, search)
 
     private val audioManager = DefaultAudioPlayerManager()
     private val ytSourceManager = YoutubeAudioSourceManager()

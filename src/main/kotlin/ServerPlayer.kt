@@ -92,7 +92,7 @@ class ServerPlayer : AudioEventAdapter {
     var volume
         get() = player.volume
         set(value) {
-            player.volume = 50
+            player.volume = value
         }
 
     fun skip() {

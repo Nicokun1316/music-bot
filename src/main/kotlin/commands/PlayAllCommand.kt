@@ -10,7 +10,7 @@ object PlayAllCommand: BotCommand("playall", "Plays the whole playlist") {
     context(env: MusicEnv)
     override suspend fun GuildChatInputCommandInteractionCreateEvent.execute(): String {
         val query = interaction.command.strings["query"] ?: return "No query specified"
-        val tracks = env.findTracks(query)
+        val tracks = env.findTracks(query, false)
         env.player.enqueue(tracks)
         return "Enqueued ${tracks.first().info.title}"
     }
