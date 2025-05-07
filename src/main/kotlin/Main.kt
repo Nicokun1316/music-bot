@@ -62,16 +62,13 @@ suspend fun main() {
         }
     }
 
-    for (command in commands.values) {
-        logger.debug { "Creating command ${command.name} with description ${command.description}" }
-        kord.createGlobalChatInputCommand(command.name, command.description) { with(command) { builder() } }
-    }
+    kord.createCommands()
 
     kord.on<GuildChatInputCommandInteractionCreateEvent> {
         val response = interaction.deferPublicResponse()
         val command = commands[interaction.invokedCommandName]
         if (command == null) {
-            logger.warn {  "No command found for name: $interaction.invokedCommandName" }
+            logger.warn {  "No command found for name: ${interaction.invokedCommandName}" }
             response.respond { content = "Unknown command ${interaction.invokedCommandName}" }
             return@on
         }
