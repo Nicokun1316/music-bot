@@ -8,7 +8,7 @@ import io.github.nicokun1316.MusicEnv
 import io.github.nicokun1316.player
 import io.github.oshai.kotlinlogging.KotlinLogging
 
-val logger = KotlinLogging.logger {}
+private val logger = KotlinLogging.logger {}
 
 object VolumeCommand: BotCommand("volume", "Sets or displays volume (0-100)") {
     context(env: MusicEnv)
@@ -20,6 +20,7 @@ object VolumeCommand: BotCommand("volume", "Sets or displays volume (0-100)") {
             logger.debug { "Factually setting volume" }
             player.volume = it.toInt()
         }
+
         return "Volume is set to ${player.volume}"
     }
 
