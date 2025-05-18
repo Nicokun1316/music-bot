@@ -41,6 +41,7 @@ suspend fun Kord.createCommands() {
         if (timestamps[name] == preferences.getLong(name, 0)) {
             logger.info { "Command $name already created" }
         } else {
+            timestamps[name]?.let { timestamp -> preferences.putLong(name, timestamp) }
             createGlobalChatInputCommand(command.name, command.description) { with(command) { builder() } }
         }
     }

@@ -67,6 +67,7 @@ suspend fun main() {
     kord.on<GuildChatInputCommandInteractionCreateEvent> {
         val response = interaction.deferPublicResponse()
         val command = commands[interaction.invokedCommandName]
+
         if (command == null) {
             logger.warn {  "No command found for name: ${interaction.invokedCommandName}" }
             response.respond { content = "Unknown command ${interaction.invokedCommandName}" }
